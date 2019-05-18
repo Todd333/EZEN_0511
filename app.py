@@ -1,12 +1,21 @@
 from flask import Flask, render_template, request, jsonify
 from member.controller import MemberController
 from ai_calc.controller import CalcController
+from blood.model import BloodModel
+from gradient_descent.controller import GredientDescentController
+from iris.controller import IsirController
+from cabbage.controller import CabbageController
+from kospi.controller import KospiController
+# from stock_ticker import Stock_tickerController
+
 import re
+
 app= Flask(__name__)
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('home.html')
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -21,9 +30,9 @@ def login():
 def move(path):
     return render_template('{}.html'.format(path))
 
-@app.route('/move/home')
-def move_home():
-    return render_template('home.html')
+# @app.route('/move/home')
+# def move_home():
+#     return render_template('home.html')
 
 @app.route('/ui_calc')
 def ui_calc():
@@ -48,9 +57,9 @@ def ui_calc():
     return jsonify(result =result)
 
 
-@app.route('/move/<path>')
-def move(path):
-    return render_template('{}.html'.format(path))
+# @app.route('/move/<path>')
+# def move(path):
+#     return render_template('{}.html'.format(path))
 
 # /ai_calc
 # print (계산기에 들어온 nim1 = {}, num2 = {}, opcode = {}/ format(num1, num2, opcode))
@@ -63,12 +72,12 @@ def ai_calc():
     opcode = request.form['opcode']
     print('계산기에 들어온 num1 = {}, num2 = {}, opcode = {}'.format(num1, num2, opcode))
     c = CalcController(num1, num2, opcode)
-    result = c.calc
+    result = c.calc()
     render_params= {}
     render_params['result']=result
     return render_template('ai_calc.html', **render_params)
 
-@app.route('/move/<path>')
+# @app.route('/move/<path>')
 def move(path):
     return render_template('{}.html'.format(path))
 
@@ -79,12 +88,54 @@ def blood():
     # opcode = request.form['opcode']
     # print('계산기에 들어온 num1 = {}, num2 = {}, opcode = {}'.format(num1, num2, opcode))
     # c = CalcController(num1, num2, opcode)
-    # result = c.calc
+    # result = c.calc()
     # render_params = {}
     # render_params['result'] = result
     print('몸무게: {}, 나이: {}'.format(weight, age))
-    return render_template('home.html')
+    model = BloodModel('blood/data/data.txt')  # model이 학습을 한다
+    raw_data =model.create_raw_data()
+    render_params ={}
+    value = model.create_model(raw_data,weight,age)
+    render_params['result'] = value
+    return render_template('blood.html', **render_params)
+
+@app.route('/gradient_descent', methods=['GET', 'POST'])
+def gradient_descent():
+    ctrl = GredientDescentController()
+    name=ctrl.service_model()
+    return render_template('gradient_descent.html',name=name)
+
+@app.route('/iris', methods=['GET', 'POST'])
+def iris():
+    ctrl = IsirController()
+    result=ctrl.service_model()
+    return render_template('iris.html', result=result)
+
+@app.route('/cabbage', methods=['GET', 'POST'])
+def cabbage():
+    ctrl = CabbageController()
+    result=ctrl.service_model()
+    render_params={}
+    render_params['result']=result
+    return render_template('cabbage.html', **render_params)
+
+@app.route('/kospi', methods=['GET', 'POST'])
+def kospi():
+    print('1')
+    ctrl = KospiController()
+    kospi=ctrl.service()
+    render_params={}
+    render_params['result']=kospi
+    return render_template('kospi.html', **render_params)
 
 
+@app.route('/stock_ticker', methods=['GET', 'POST'])
+def stock_ticker():
+    print('1')
+    ctrl = Stock_tickerController()
+    kospi=ctrl.service()
+    render_params={}
+    render_params['result']=kospi
+    return render_template('kospi.html', **render_params)
 if __name__ == '__main__':
     app.run()

@@ -6,8 +6,8 @@ class CalcModel:
     def __init__(self):
         pass
 
-    @staticmethod
-    def create_add_Model():
+    # @staticmethod
+    def create_add_model(self):
         w1 = tf.placeholder(tf.float32, name = 'w1')
         w2 = tf.placeholder(tf.float32, name = 'w2')
         feed_dict = {'w1':8.0, 'w2':2.0}
@@ -25,10 +25,13 @@ class CalcModel:
         print('TF 덧셈결과{}'.format(result))
         saver.save(sess, './saved_add/model', global_step=1000)
 
-    def create_sub_Model(self):
-        w1 = self._w1
-        w2 = self._w2
-        feed_dict = self._feed_dict
+    def create_sub_model(self):
+        # w1 = self._w1
+        # w2 = self._w2
+        # feed_dict = self._feed_dict
+        w1 = tf.placeholder(tf.float32, name = 'w1')
+        w2 = tf.placeholder(tf.float32, name = 'w2')
+        feed_dict = {'w1':8.0, 'w2':2.0}
 
         r = tf.subtract(w1, w2, name='op_sub')
         sess = tf.Session()
@@ -39,10 +42,10 @@ class CalcModel:
         print('TF 뺄셈결과{}'.format(result))
         saver.save(sess, './saved_sub/model', global_step=1000)
 
-    def create_mul_Model(self):
-        w1 = self._w1
-        w2 = self._w2
-        feed_dict = self._feed_dict
+    def create_mul_model(self):
+        w1 = tf.placeholder(tf.float32, name = 'w1')
+        w2 = tf.placeholder(tf.float32, name = 'w2')
+        feed_dict = {'w1':8.0, 'w2':2.0}
 
         r = tf.multiply(w1, w2, name='op_mul')
         sess = tf.Session()
@@ -53,10 +56,10 @@ class CalcModel:
         print('TF 곱셈결과{}'.format(result))
         saver.save(sess, './saved_mul/model', global_step=1000)
 
-    def create_div_Model(self):
-        w1 = self._w1
-        w2 = self._w2
-        feed_dict = self._feed_dict
+    def create_div_model(self):
+        w1 = tf.placeholder(tf.float32, name = 'w1')
+        w2 = tf.placeholder(tf.float32, name = 'w2')
+        feed_dict = {'w1':8.0, 'w2':2.0}
 
         r = tf.math.floordiv(w1, w2, name='op_div')
         sess = tf.Session()
