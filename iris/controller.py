@@ -23,8 +23,8 @@ class IsirController:
         args=parser.parse_args()
         features = [args['sepal_length'],
                     args['sepal_width'],
-                    args['sepal_length'],
-                    args['sepal_width']]
+                    args['petal_length'],
+                    args['petal_width']]
         features = np.reshape(features, (1, 4))
         with graph.as_default():
             Y_pred = model.predict_classes(features)
